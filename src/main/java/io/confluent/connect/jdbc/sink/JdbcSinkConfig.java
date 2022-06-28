@@ -145,6 +145,11 @@ public class JdbcSinkConfig extends AbstractConfig {
       + "found to be missing by issuing ``CREATE``.";
   private static final String AUTO_CREATE_DISPLAY = "Auto-Create";
 
+  public static final String IGNORE_TABLE = "ignore.table";
+  private static final String IGNORE_TABLE_DEFAULT = "false";
+  private static final String IGNORE_TABLE_DOC = "Ignore table creation";
+  private static final String IGNORE_TABLE_DISPLAY = "Ignore-Table";
+
   public static final String AUTO_EVOLVE = "auto.evolve";
   private static final String AUTO_EVOLVE_DEFAULT = "false";
   private static final String AUTO_EVOLVE_DOC =
@@ -447,6 +452,16 @@ public class JdbcSinkConfig extends AbstractConfig {
             AUTO_CREATE_DISPLAY
         )
         .define(
+            IGNORE_TABLE,
+            ConfigDef.Type.BOOLEAN,
+            IGNORE_TABLE_DEFAULT,
+            ConfigDef.Importance.MEDIUM,
+            IGNORE_TABLE_DOC, DDL_GROUP,
+            1,
+            ConfigDef.Width.SHORT,
+            IGNORE_TABLE_DISPLAY
+        )
+        .define(
             AUTO_EVOLVE,
             ConfigDef.Type.BOOLEAN,
             AUTO_EVOLVE_DEFAULT,
@@ -505,6 +520,7 @@ public class JdbcSinkConfig extends AbstractConfig {
   public final int maxRetries;
   public final int retryBackoffMs;
   public final boolean autoCreate;
+  public final boolean ignoreTable;
   public final boolean autoEvolve;
   public final InsertMode insertMode;
   public final PrimaryKeyMode pkMode;
@@ -528,6 +544,7 @@ public class JdbcSinkConfig extends AbstractConfig {
     maxRetries = getInt(MAX_RETRIES);
     retryBackoffMs = getInt(RETRY_BACKOFF_MS);
     autoCreate = getBoolean(AUTO_CREATE);
+    ignoreTable = getBoolean(IGNORE_TABLE);
     autoEvolve = getBoolean(AUTO_EVOLVE);
     insertMode = InsertMode.valueOf(getString(INSERT_MODE).toUpperCase());
     pkMode = PrimaryKeyMode.valueOf(getString(PK_MODE).toUpperCase());

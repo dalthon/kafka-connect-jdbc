@@ -119,12 +119,14 @@ public class BufferedRecords {
           config.fieldsWhitelist,
           schemaPair
       );
-      dbStructure.createOrAmendIfNecessary(
-          config,
-          connection,
-          tableId,
-          fieldsMetadata
-      );
+      if (!config.ignoreTable) {
+        dbStructure.createOrAmendIfNecessary(
+            config,
+            connection,
+            tableId,
+            fieldsMetadata
+        );
+      }
       final String insertSql = getInsertSql();
       final String deleteSql = getDeleteSql();
       log.debug(
